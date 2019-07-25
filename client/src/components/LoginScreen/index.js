@@ -32,11 +32,11 @@ const styles = theme => ({
     height: "100vh"
   },
   contentDiv: {
-    paddingLeft: "10%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "column"
+    flexDirection: "column",
+    minWidth: "30em"
   }
 });
 
@@ -111,7 +111,7 @@ class LoginScreen extends React.Component {
                 Entering the Library?
               </Typography>
               <Typography variant="subtitle1" style={{ marginBottom: "2.5em" }}>
-                before that, please type in your Student ID (NIM)
+                before that, please login first
               </Typography>
 
               <TextField

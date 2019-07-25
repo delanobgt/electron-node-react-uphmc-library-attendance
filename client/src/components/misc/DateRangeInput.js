@@ -1,12 +1,7 @@
 import moment from "moment";
 import React, { Component } from "react";
-import { compose } from "redux";
-import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-
-import * as snackbarActions from "../../actions/snackbar";
+import { Button, TextField, Typography } from "@material-ui/core";
 
 const styles = theme => ({
   container: {
@@ -20,18 +15,22 @@ const styles = theme => ({
 });
 
 class DateRangeInput extends Component {
+  errorMsgTimeout = null;
+
   constructor(props) {
     super(props);
     if (props.initDate) {
       const { startDate, endDate } = props.initDate;
       this.state = {
         startDate,
-        endDate
+        endDate,
+        errorMsg: <span>&nbsp;</span>
       };
     } else {
       this.state = {
         startDate: moment().format("YYYY-MM-DD"),
-        endDate: moment().format("YYYY-MM-DD")
+        endDate: moment().format("YYYY-MM-DD"),
+        errorMsg: <span>&nbsp;</span>
       };
     }
   }
@@ -41,18 +40,28 @@ class DateRangeInput extends Component {
   };
 
   handleSubmit = e => {
+    if (this.errorMsgTimeout) clearTimeout(this.errorMsgTimeout);
+
     e.preventDefault();
     const { startDate, endDate } = this.state;
-    const { errorSnackbar, onAction } = this.props;
+    const { onAction } = this.props;
 
     if (moment(startDate).isAfter(endDate)) {
-      return errorSnackbar("Invalid data range!");
+      this.errorMsgTimeout = setTimeout(() => {
+        this.setState({
+          errorMsg: <span>&nbsp;</span>
+        });
+      }, 2000);
+      return this.setState({
+        errorMsg: "Invalid data range!"
+      });
     }
     if (onAction) onAction({ startDate, endDate });
   };
 
   render() {
     const { classes, buttonLabel, actionButtonDisabled } = this.props;
+    const { errorMsg } = this.state;
 
     return (
       <div>
@@ -85,20 +94,13 @@ class DateRangeInput extends Component {
               {buttonLabel || "Generate"}
             </Button>
           </div>
+          <Typography variant="subtitle1" style={{ color: "red" }}>
+            {errorMsg}
+          </Typography>
         </form>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {};
-}
-
-export default compose(
-  withStyles(styles),
-  connect(
-    mapStateToProps,
-    { ...snackbarActions }
-  )
-)(DateRangeInput);
+export default withStyles(styles)(DateRangeInput);

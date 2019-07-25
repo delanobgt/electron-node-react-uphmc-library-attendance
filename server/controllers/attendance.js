@@ -1,8 +1,35 @@
 const _ = require("lodash");
 const db = require("../models");
-const bcrypt = require("../modules/bcrypt");
-const crypto = require("crypto");
 const moment = require("moment");
+const Op = require("sequelize").Op;
+
+exports.getAttendances = async (req, res) => {
+  const { startDate, endDate } = req.query;
+  console.log({ startDate, endDate });
+  try {
+    const attendances = await db.Attendance.findAll({
+      where: {
+        time: { [Op.gte]: moment(startDate).toDate() },
+        time: {
+          [Op.lt]: moment(endDate, "YYYY-MM-DD")
+            .add(1, "days")
+            .toDate()
+        }
+      },
+      include: [
+        {
+          model: db.Student,
+          required: true,
+          include: [{ model: db.StudyProgram, required: true }]
+        }
+      ]
+    });
+    res.json(attendances);
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ msg: "Cannot get Attendances data" });
+  }
+};
 
 exports.createAttendance = async (req, res) => {
   const { student_nim, time } = req.body;

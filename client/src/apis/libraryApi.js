@@ -11,6 +11,13 @@ export const createAttendance = async ({ student_nim, time }) => {
   return response.data;
 };
 
+export const getAttendances = async ({ startDate, endDate }) => {
+  const response = await instance.get("/attendances", {
+    params: { startDate, endDate }
+  });
+  return response.data;
+};
+
 export const getStudents = async () => {
   const response = await instance.get("/students");
   return response.data;
