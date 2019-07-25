@@ -1,0 +1,16 @@
+{
+  "name": "electron-node-react-uphmc-library-attendance",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/delanobgt/electron-node-react-uphmc-library-attendance.git",
+  "author": "delanobgt <irvindelano@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently \"cd server && yarn start\" \"cd client && yarn start\""
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.1",
+    "electron": "^5.0.8",
+    "wait-on": "^3.3.0"
+  }
+}
