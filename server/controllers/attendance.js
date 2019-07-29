@@ -9,8 +9,8 @@ exports.getAttendances = async (req, res) => {
   try {
     const attendances = await db.Attendance.findAll({
       where: {
-        time: { [Op.gte]: moment(startDate).toDate() },
         time: {
+          [Op.gte]: moment(startDate).toDate(),
           [Op.lt]: moment(endDate, "YYYY-MM-DD")
             .add(1, "days")
             .toDate()
